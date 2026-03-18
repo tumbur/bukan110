@@ -7,21 +7,39 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+function getAllReferences() {
+  const dataPath = path.join(process.cwd(), "data");
+  const filenames = fs.readdirSync(dataPath);
+
+  // Ambil isi semua file .md atau .txt dan gabungkan jadi satu teks besar
+  const allContent = filenames
+    .filter(file => file.endsWith(".md") || file.endsWith(".txt"))
+    .map(file => {
+      const content = fs.readFileSync(path.join(dataPath, file), "utf8");
+      //  return `--- SUMBER: ${file} ---\n${content}\n`;
+      return content;
+    })
+    .join("\n");
+
+  return allContent;
+}
+
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
     // 1. Tentukan jalur ke file referensi
-    const filePath = path.join(process.cwd(), "data", "referensi.txt");
+    //const filePath = path.join(process.cwd(), "data", "referensi.txt");
     // 2. Baca isi filenya sebagai teks (string)
-    const referensiKonten = fs.readFileSync(filePath, "utf8");
+    //const referensiKonten = fs.readFileSync(filePath, "utf8");
+    const referensiKonten = getAllReferences();
     // 3. Masukkan isi file ke dalam prompt system
     const res = await openai.chat.completions.create({
       model: "gpt-5-mini",
       messages: [
         {
           role: "system",
-          content: `Berikut adalah basis pengetahuan (knowledge base) dalam format Markdown.
-          Jawablah pertanyaan hanya berdasarkan data ini:
+          content: `Kamu adalah asisten Bukan 110 Polri. 
+          Gunakan referensi berikut untuk menjawab pertanyaan user:
           
           ${referensiKonten}
           
