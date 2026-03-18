@@ -1,29 +1,45 @@
+import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
+import fs from "fs";
+import path from "path";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function POST(req: Request) {
-  const { message } = await req.json();
+  try {
+    const { message } = await req.json();
+    // 1. Tentukan jalur ke file referensi
+    const filePath = path.join(process.cwd(), "data", "referensi.txt");
+    // 2. Baca isi filenya sebagai teks (string)
+    const referensiKonten = fs.readFileSync(filePath, "utf8");
+    // 3. Masukkan isi file ke dalam prompt system
+    const res = await openai.chat.completions.create({
+      model: "gpt-5-mini",
+      messages: [
+        {
+          role: "system",
+          content: `Berikut adalah basis pengetahuan (knowledge base) dalam format Markdown.
+          Jawablah pertanyaan hanya berdasarkan data ini:
+          
+          ${referensiKonten}
+          
+          Jika jawaban tidak ada di referensi, arahkan ke kantor polisi terdekat.`
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+    });
 
-  const res = await openai.chat.completions.create({
-    model: "gpt-5-mini",
-    messages: [
-      {
-        role: "system",
-        content:
-          "Kamu adalah asisten layanan kepolisian Indonesia. Jawab jelas dan formal. nomor telepon yang terkait dengan kepolisian adalah hanya 110. gunakan referensi hukum dari KUHP baru UU No. 1 Tahun 2023 tentang Kitab Undang-Undang Hukum Pidana dan UU No. 20 Tahun 2025 tentang Kitab Undang-Undang Hukum Acara Pidana (KUHAP Baru) yang resmi berlaku mulai 2 Januari 2026. Undang-Undang Nomor 22 Tahun 2009 tentang Lalu Lintas dan Angkutan Jalan.Berikan jawaban dalam format Markdown yang rapi. nama kapolres aceh tamiang sekarang adalah Muliadi SH MH. Gunakan bullet points jika perlu, dan gunakan huruf tebal (bold) untuk poin penting",
 
-      },
-      {
-        role: "user",
-        content: message,
-      },
-    ],
-  });
-
-  return Response.json({
-    reply: res.choices[0].message.content,
-  });
+    return Response.json({
+      reply: res.choices[0].message.content,
+    });
+  } catch (error) {
+    console.error(error);
+    return Response.json({ error: "Gagal memproses pesan" }, { status: 500 });
+  }
 }
