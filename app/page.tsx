@@ -32,14 +32,14 @@ export default function Home() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",     // Tengah secara horizontal
-      //justifyContent: "center",    // Tengah secara vertikal
+      justifyContent: "center",    // Tengah secara vertikal
       minHeight: "100vh",          // Tinggi layar penuh
       backgroundColor: "#ffffff28",
       fontFamily: "Arial, sans-serif",
-      padding: "100px"
+      padding: "10px"
     }}>
       <h1 style={{
-        fontSize: "40px",
+        fontSize: "48px",
         fontWeight: "bold",
         color: "#ffffff"
       }}>
