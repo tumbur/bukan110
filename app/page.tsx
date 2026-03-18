@@ -39,7 +39,7 @@ export default function Home() {
       padding: "100px"
     }}>
       <h1 style={{
-        fontSize: "48px",
+        fontSize: "40px",
         fontWeight: "bold",
         color: "#ffffff"
       }}>
@@ -47,7 +47,7 @@ export default function Home() {
       </h1>
       <h5 style={{
         fontSize: "15px",
-        marginBottom: "30px",
+        marginBottom: "50px",
         fontWeight: "normal",
         color: "#ffffff"
       }}>
@@ -81,7 +81,8 @@ export default function Home() {
 
         <div style={{ display: "flex", gap: "10px" }}>
           <button onClick={send} style={buttonStyle}>
-            Kirim Dengan Delay {`<`} 10 Detik
+            Klik Jawaban <br></br>
+            <span style={{ fontSize: "12px", fontStyle: "italic" }}>(Dengan Delay {`<`} 10 Detik)</span>
           </button>
         </div>
       </div>
@@ -112,7 +113,7 @@ const buttonStyle = {
   borderRadius: "10px",
   boxShadow: "1px 1px 5px 5px rgba(255, 255, 255, 0.28)",
   color: "#ffffff",
-  fontSize: "20px",
+  fontSize: "15px",
   fontWeight: "bold",
   cursor: "pointer",
   transition: "border 0.2s"
