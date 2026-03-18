@@ -43,7 +43,7 @@ export default function Home() {
         fontWeight: "bold",
         color: "#ffffff"
       }}>
-        Bukan 110 Polri
+        Bukan 110
       </h1>
       <h5 style={{
         fontSize: "15px",
