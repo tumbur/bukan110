@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bukan 110 Polri",
-  description: "Memang Bukan 110 Polri, Hanya AI Assistant",
+  title: "Bukan 110",
+  description: "Memang Bukan 110, Hanya AI Assistant",
 };
 
 export default function RootLayout({
@@ -29,6 +30,7 @@ export default function RootLayout({
         suppressHydrationWarning // Menghindari error dari ekstensi browser
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
